@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dep-client-ver1
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: client
+      version: "1"
+  template:
+    metadata:
+      labels:
+        app: client
+        version: "1"
+    spec:
+      containers:
+      - name: client1
+        image: 217747396203.dkr.ecr.us-east-1.amazonaws.com/mydockerrepo:client
+        ports:
+        - containerPort: 3000
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 3000
+          initialDelaySeconds: 15
+          periodSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 3000
+          initialDelaySeconds: 15
+          periodSeconds: 5
+          failureThreshold: 2
